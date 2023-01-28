@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="./styles.css">
-  <script src="./stopwatch.js"></script>
+  <script src="./stopwatch.js" async></script>
   <title>Stopwatch</title>
 </head>
 
@@ -18,7 +18,9 @@
         Let's track time
       </p>
 
-      <p id="time" class="time">00:00:00</p>
+      <div id="time" class="time">
+        00 : 00 : 00 : 00
+      </div>
 
       <div class="actionButtonContainer">
         <button id="startButton">Start</button>
