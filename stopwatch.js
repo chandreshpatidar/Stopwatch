@@ -115,9 +115,11 @@ function onRecordButtonClick() {
   let currentTime = Number(
     `${hoursInString}${minutesInString}${secondsInString}${milliSecondsInString}`
   );
-  lastRecordedTime = currentTime - lastRecordedTime;
-  const lastRecordedTimeStr = String(currentTime);
+  let timeDiff = currentTime - Number(lastRecordedTime);
+  const lastRecordedTimeStr = String(timeDiff);
   const lastRecordedTimeStrLength = lastRecordedTimeStr.length;
+
+  lastRecordedTime = currentTime;
 
   let recordedHours = 0;
   let recordedMinutes = 0;
@@ -146,7 +148,7 @@ function onRecordButtonClick() {
       `0${lastRecordedTimeStr.charAt(0)}`;
     recordedSeconds = lastRecordedTimeStr.slice(
       lastRecordedTimeStrLength - 4,
-      4
+      lastRecordedTimeStrLength === 5 ? 3 : 4
     );
     recordedMilliSeconds = lastRecordedTimeStr.slice(
       lastRecordedTimeStrLength - 2,
@@ -158,17 +160,27 @@ function onRecordButtonClick() {
       `0${lastRecordedTimeStr.charAt(0)}`;
     recordedMinutes = lastRecordedTimeStr.slice(
       lastRecordedTimeStrLength - 6,
-      4
+      lastRecordedTimeStrLength === 5 ? 3 : 4
     );
     recordedSeconds = lastRecordedTimeStr.slice(
       lastRecordedTimeStrLength - 4,
-      6
+      lastRecordedTimeStrLength === 5 ? 5 : 6
     );
     recordedMilliSeconds = lastRecordedTimeStr.slice(
       lastRecordedTimeStrLength - 2,
       8
     );
   }
+
+  // if (Number(recordedSeconds) > 60) {
+  //   recordedSeconds = '00';
+  //   recordedMinutes = Number(recordedMinutes) + 1;
+  // }
+
+  // if (Number(recordedMinutes) > 60) {
+  //   recordedMinutes = '00';
+  //   recordedHours = Number(recordedHours) + 1;
+  // }
 
   const timeDifference = `${recordedHours} : ${recordedMinutes} : ${recordedSeconds} : ${recordedMilliSeconds}`;
   span.innerHTML = timeDifference;
