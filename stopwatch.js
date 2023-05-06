@@ -10,6 +10,7 @@ let minutes = 00;
 let seconds = 00;
 let milliSeconds = 00;
 let isTimerRunning = false;
+let lastRecordedTime = 0;
 
 function getTimeUnitsInString() {
   let milliSecondsInString = milliSeconds;
@@ -111,12 +112,82 @@ function onRecordButtonClick() {
 
   list.innerHTML = `${hoursInString} : ${minutesInString} : ${secondsInString} : ${milliSecondsInString}`;
 
-  const timeDifference = '10 : 10 : 10 : 10';
+  let currentTime = Number(
+    `${hoursInString}${minutesInString}${secondsInString}${milliSecondsInString}`
+  );
+  let timeDiff = currentTime - Number(lastRecordedTime);
+  const lastRecordedTimeStr = String(timeDiff);
+  const lastRecordedTimeStrLength = lastRecordedTimeStr.length;
+
+  lastRecordedTime = currentTime;
+
+  let recordedHours = 0;
+  let recordedMinutes = 0;
+  let recordedSeconds = 0;
+  let recordedMilliSeconds = 0;
+
+  if (lastRecordedTimeStrLength <= 2) {
+    recordedHours = '00';
+    recordedMinutes = '00';
+    recordedSeconds = '00';
+    recordedMilliSeconds = lastRecordedTimeStr;
+  } else if (lastRecordedTimeStrLength <= 4) {
+    recordedHours = '00';
+    recordedMinutes = '00';
+    recordedSeconds =
+      lastRecordedTimeStr.slice(lastRecordedTimeStrLength - 4, 2) ||
+      `0${lastRecordedTimeStr.charAt(0)}`;
+    recordedMilliSeconds = lastRecordedTimeStr.slice(
+      lastRecordedTimeStrLength - 2,
+      4
+    );
+  } else if (lastRecordedTimeStrLength <= 6) {
+    recordedHours = '00';
+    recordedMinutes =
+      lastRecordedTimeStr.slice(lastRecordedTimeStrLength - 6, 2) ||
+      `0${lastRecordedTimeStr.charAt(0)}`;
+    recordedSeconds = lastRecordedTimeStr.slice(
+      lastRecordedTimeStrLength - 4,
+      lastRecordedTimeStrLength === 5 ? 3 : 4
+    );
+    recordedMilliSeconds = lastRecordedTimeStr.slice(
+      lastRecordedTimeStrLength - 2,
+      6
+    );
+  } else if (lastRecordedTimeStrLength <= 8) {
+    recordedHours =
+      lastRecordedTimeStr.slice(lastRecordedTimeStrLength - 8, 2) ||
+      `0${lastRecordedTimeStr.charAt(0)}`;
+    recordedMinutes = lastRecordedTimeStr.slice(
+      lastRecordedTimeStrLength - 6,
+      lastRecordedTimeStrLength === 5 ? 3 : 4
+    );
+    recordedSeconds = lastRecordedTimeStr.slice(
+      lastRecordedTimeStrLength - 4,
+      lastRecordedTimeStrLength === 5 ? 5 : 6
+    );
+    recordedMilliSeconds = lastRecordedTimeStr.slice(
+      lastRecordedTimeStrLength - 2,
+      8
+    );
+  }
+
+  // if (Number(recordedSeconds) > 60) {
+  //   recordedSeconds = '00';
+  //   recordedMinutes = Number(recordedMinutes) + 1;
+  // }
+
+  // if (Number(recordedMinutes) > 60) {
+  //   recordedMinutes = '00';
+  //   recordedHours = Number(recordedHours) + 1;
+  // }
+
+  const timeDifference = `${recordedHours} : ${recordedMinutes} : ${recordedSeconds} : ${recordedMilliSeconds}`;
   span.innerHTML = timeDifference;
 
   list.appendChild(span);
 
-  recordedTimeListEle.appendChild(list);
+  recordedTimeListEle.prepend(list);
 }
 
 startButton.addEventListener('click', onStartButtonClick);
